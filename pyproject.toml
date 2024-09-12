@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "videoplayer"
+version = "0.1.0"
+description = ""
+authors = ["Jorique <guselnikovgeorgiy@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["all"], version = "^0.114.1"}
+motor = "^3.5.1"
+uvicorn = "^0.30.6"
+ipython = "^8.27.0"
+pymongo = "^4.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
