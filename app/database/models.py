@@ -22,21 +22,22 @@ class Base(DeclarativeBase):
     id: Mapped[uuid_pk]
 
 
-# class Street(Base):
-#     name: str
-#
-#
-# class Cameras(Base):
-#     title: str
-#     district: str
-#
-#
-#
-# class Recording(Base):
-#     date: datetime
-#     link: str
-#
-#
-# class City(Base):
-#     name: str
-#     streets: list[Street]
+
+class Streets(Base):
+    __tablename__ = 'streets'
+
+    id: Mapped[uuid_pk]
+    name: Mapped[str]
+
+class Cameras(Base):
+    __tablename__ = 'cameras'
+
+    id: Mapped[uuid_pk]
+    title: Mapped[str]
+    streetId: Mapped[uuid_pk] = mapped_column(ForeignKey("streets.id"))
+    address: Mapped[str]
+
+class ArchivesTask(Base):
+    __tablename__ = 'archivestask'
+    id: Mapped[uuid_pk]
+    cameraId = mapped_column(ForeignKey("cameras.id"))
