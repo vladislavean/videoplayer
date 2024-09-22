@@ -3,7 +3,8 @@ from typing import Optional, Annotated
 import uuid
 from sqlalchemy import ForeignKey, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.orm import DeclarativeBase
+
+from app.database.db import Base
 
 
 uuid_pk = Annotated[
@@ -18,16 +19,12 @@ uuid_pk = Annotated[
 ]
 
 
-class Base(DeclarativeBase):
-    id: Mapped[uuid_pk]
-
-
-
 class Streets(Base):
     __tablename__ = 'streets'
 
     id: Mapped[uuid_pk]
     name: Mapped[str]
+
 
 class Cameras(Base):
     __tablename__ = 'cameras'
@@ -37,7 +34,9 @@ class Cameras(Base):
     streetId: Mapped[uuid_pk] = mapped_column(ForeignKey("streets.id"))
     address: Mapped[str]
 
+
 class ArchivesTask(Base):
     __tablename__ = 'archivestask'
+
     id: Mapped[uuid_pk]
     cameraId = mapped_column(ForeignKey("cameras.id"))
