@@ -46,5 +46,6 @@ class ArchivesTask(Base):
 
     id: Mapped[uuid_pk]
     cameraId: Mapped[uuid.UUID] = mapped_column(ForeignKey("cameras.id"))
+    url: Mapped[str]
 
     street: Mapped["Cameras"] = relationship(back_populates="ArchivesTask")
