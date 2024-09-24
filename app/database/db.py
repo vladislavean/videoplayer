@@ -31,3 +31,11 @@ async def find_all(model, **filter_by):
         result = await session.execute(query)
         return result.mappings().all()
 
+
+@catch_db_errors
+async def insert_one(model, **data):
+    async with async_session_maker() as session:
+        query = insert(model).values(**data).returning()
+        await session.execute(query)
+        await session.commit()
+        return {'status': 'OK'}
