@@ -25,6 +25,8 @@ class Streets(Base):
     id: Mapped[uuid_pk]
     name: Mapped[str]
 
+    cameras: Mapped[list["Cameras"]] = relationship("Cameras", back_populates="streets")
+
 
 class Cameras(Base):
     __tablename__ = 'cameras'
@@ -34,9 +36,15 @@ class Cameras(Base):
     streetId: Mapped[uuid.UUID] = mapped_column(ForeignKey("streets.id"))
     address: Mapped[str]
 
+    street: Mapped["Streets"] = relationship(back_populates="cameras")
+
+    cameras: Mapped[list["ArchivesTask"]] = relationship("ArchivesTask", back_populates="Cameras")
+
 
 class ArchivesTask(Base):
     __tablename__ = 'archivestask'
 
     id: Mapped[uuid_pk]
     cameraId: Mapped[uuid.UUID] = mapped_column(ForeignKey("cameras.id"))
+
+    street: Mapped["Cameras"] = relationship(back_populates="ArchivesTask")
