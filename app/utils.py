@@ -16,7 +16,7 @@ from fastapi.responses import StreamingResponse
 from fastapi import HTTPException
 
 
-async def download_video(url):
+async def streaming_video(url):
     try:
         response = requests.get(url, stream=True)
         response.raise_for_status()
