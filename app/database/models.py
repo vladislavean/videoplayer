@@ -1,10 +1,12 @@
-from datetime import datetime
 from typing import Optional, Annotated
 import uuid
 from sqlalchemy import ForeignKey, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase
 
-from app.database.db import Base
+
+class Base(DeclarativeBase):
+    pass
 
 
 uuid_pk = Annotated[
