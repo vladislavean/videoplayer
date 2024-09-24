@@ -31,7 +31,7 @@ class Cameras(Base):
 
     id: Mapped[uuid_pk]
     title: Mapped[str]
-    streetId: Mapped[uuid_pk] = mapped_column(ForeignKey("streets.id"))
+    streetId: Mapped[uuid.UUID] = mapped_column(ForeignKey("streets.id"))
     address: Mapped[str]
 
 
@@ -39,4 +39,4 @@ class ArchivesTask(Base):
     __tablename__ = 'archivestask'
 
     id: Mapped[uuid_pk]
-    cameraId = mapped_column(ForeignKey("cameras.id"))
+    cameraId: Mapped[uuid.UUID] = mapped_column(ForeignKey("cameras.id"))
