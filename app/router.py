@@ -3,7 +3,7 @@ from fastapi import HTTPException
 
 from fastapi import APIRouter
 
-from app.database.db import select_all, find_all, find_one_or_none
+from app.database.db import select_all, find_all, find_one_or_none, insert_one
 from app.database.models import Streets, Cameras, ArchivesTask
 from app.database.schemas import SchemaStreet, SchemaCamera, SchemaArchiveTask
 from app.utils import download_video
@@ -65,3 +65,8 @@ async def get_archive_video(archive_id: uuid.UUID):
     if archive is None:
         raise HTTPException(status_code=404)
     return await download_video(archive.url)
+
+
+@router.post("/street")
+async def add_street(street_name: str):
+    return await insert_one(Streets, name=street_name)
