@@ -15,6 +15,7 @@ router = APIRouter()
     "/",
     response_model=list[SchemaStreet],
     summary="Все улицы",
+    tags=['Street_API']
 )
 async def get_streets():
     return await select_all(Streets)
@@ -24,6 +25,7 @@ async def get_streets():
     "/cameras",
     response_model=list[SchemaCamera],
     summary="Все камеры",
+    tags=['Cameras_API']
 )
 async def get_cameras():
     return await select_all(Cameras)
@@ -33,6 +35,7 @@ async def get_cameras():
     "/archives",
     response_model=list[SchemaArchiveTask],
     summary="Все видосы",
+    tags=['Archives_API']
 )
 async def get_archives():
     return await select_all(ArchivesTask)
@@ -42,6 +45,7 @@ async def get_archives():
     "/cameras/{street_id}",
     response_model=list[SchemaCamera],
     summary="Найти камеры по id улицы",
+    tags=['Cameras_API']
 )
 async def get_cameras_by_street(street_id: uuid.UUID):
     return await find_all(Cameras, streetId=street_id)
@@ -51,6 +55,7 @@ async def get_cameras_by_street(street_id: uuid.UUID):
     "/archives/{camera_id}",
     response_model=list[SchemaArchiveTask],
     summary="Найти видосы по id камеры",
+    tags=['Archives_API']
 )
 async def get_archives_by_camera(camera_id: uuid.UUID):
     return await find_all(ArchivesTask, cameraId=camera_id)
@@ -59,6 +64,7 @@ async def get_archives_by_camera(camera_id: uuid.UUID):
 @router.get(
     "/archive/{archive_id}",
     summary="Стрим видоса по id (чистые байты)",
+    tags=['Archives_API']
 )
 async def get_archive_video(archive_id: uuid.UUID):
     archive = await find_one_or_none(ArchivesTask, id=archive_id)
@@ -67,6 +73,19 @@ async def get_archive_video(archive_id: uuid.UUID):
     return await streaming_video(archive.url)
 
 
-@router.post("/street")
+@router.post("/street",
+             summary="Создание новой улицы",
+             tags=['Street_API'])
 async def add_street(street_name: str):
     return await insert_one(Streets, name=street_name)
+
+
+@router.post(
+    "/camera",
+    summary="Добавление новой камеры на портал. Id улицы указывать самостоятельно пж",
+    tags=['Cameras_API']
+)
+async def add_camera(camera_title: str,
+                     camera_streetid: uuid.UUID,
+                     camera_address: str):
+    return await insert_one(Cameras, title=camera_title, streetid=camera_streetid, address=camera_address)
