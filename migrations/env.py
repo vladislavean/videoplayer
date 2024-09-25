@@ -8,7 +8,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from app.database.db import Base
+from app.database.models import Base
 from app.database.models import ArchivesTask, Cameras, Streets
 
 from app.database.settings import postgre_settings
