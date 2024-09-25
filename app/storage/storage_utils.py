@@ -1,10 +1,11 @@
 import uuid
 from fastapi import HTTPException
-from app.storage.settings import StorageSettings
-from app.database.settings import PostgreSettings
+#from app.storage.settings import StorageSettings
+#from app.database.settings import PostgreSettings
 import asyncssh
 import tempfile
 
+"""
 
 class StorageSSH:
     async def _connection_by_ssh(
@@ -59,3 +60,4 @@ class StorageSSH:
         async with connection.start_sftp_client() as sftp_client:
             await sftp_client.put(temp_file_path, f'/files/{str(street_id)}/{camera_title}/{archive_id}.mp4')
 
+"""
