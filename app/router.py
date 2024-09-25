@@ -6,7 +6,7 @@ from fastapi import APIRouter
 from app.database.db import select_all, find_all, find_one_or_none, insert_one
 from app.database.models import Streets, Cameras, ArchivesTask
 from app.database.schemas import SchemaStreet, SchemaCamera, SchemaArchiveTask
-from app.utils import streaming_video
+from app.utils import streaming_video, download_video
 
 router = APIRouter()
 
@@ -71,6 +71,18 @@ async def get_archive_video(archive_id: uuid.UUID):
     if archive is None:
         raise HTTPException(status_code=404)
     return await streaming_video(archive.url)
+
+
+@router.get(
+    "/archive/download/{archive_id}",
+    summary="Скачивание видео",
+    tags=['Archives_API']
+)
+async def get_archive_video(archive_id: uuid.UUID):
+    archive = await find_one_or_none(ArchivesTask, id=archive_id)
+    if archive is None:
+        raise HTTPException(status_code=404)
+    return await download_video(archive.url, archive_id)
 
 
 @router.post("/street",
