@@ -24,11 +24,23 @@ class StorageSSH:
     async def create_street_folder_or_ignore(
             self,
             street_id: uuid.UUID
-    ) -> None | str:
+    ):
         connection = await self._connection_by_ssh()
         async with connection.start_sftp_client() as sftp_client:
-            if not await sftp_client.exists(f"/files/{street_id}/"):
-                await sftp_client.makedirs(f"/files/{street_id}")
+            if not await sftp_client.exists(f"/files/{str(street_id)}/"):
+                await sftp_client.makedirs(f"/files/{str(street_id)}/")
+            else:
+                return None
+
+    async def create_cameras_folder_or_ignore(
+            self,
+            street_id: uuid.UUID,
+            camera_title: str
+    ):
+        connection = await self._connection_by_ssh()
+        async with connection.start_sftp_client() as sftp_client:
+            if not await sftp_client.exists(f"/files/{str(street_id)}/{camera_title}"):
+                await sftp_client.makedirs(f"/files/{str(street_id)}/{camera_title}")
             else:
                 return None
 
