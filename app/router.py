@@ -100,4 +100,4 @@ async def add_street(street_name: str):
 async def add_camera(camera_title: str,
                      camera_streetid: uuid.UUID,
                      camera_address: str):
-    return await insert_one(Cameras, title=camera_title, streetid=camera_streetid, address=camera_address)
+    return await insert_one(Cameras, title=camera_title, streetId=camera_streetid, address=camera_address)
