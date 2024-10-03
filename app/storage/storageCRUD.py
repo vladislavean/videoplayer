@@ -1,4 +1,4 @@
 
 
-class StorageCRUD:
- ...
+#class StorageCRUD:
+ #...
