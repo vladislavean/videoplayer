@@ -37,7 +37,6 @@ async def streaming_video(url):
     try:
         response = requests.get(url, stream=True)
         response.raise_for_status()
-
         return StreamingResponse(BytesIO(response.content), media_type="video/mp4")
     except requests.exceptions.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Error streaming video: {url}. {str(e)}")
