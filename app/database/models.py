@@ -51,3 +51,22 @@ class ArchivesTask(Base):
     url: Mapped[str]
 
     street: Mapped["Cameras"] = relationship(back_populates="ArchivesTask")
+
+class FunctionalRoles(Base):
+    __tablename__ = 'functionalroles'
+
+    id: Mapped[uuid_pk]
+    name: Mapped[str]
+    ServicePackets: Mapped[str]
+
+    usersRole: Mapped[list["Users"]] = relationship("Users", back_populates="FunctionalRoles")
+
+class Users(Base):
+    __tablename__ = 'users'
+
+    id: Mapped[uuid_pk]
+    login: Mapped[str]
+    fio: Mapped[str]
+    roleId: Mapped[uuid.UUID] = mapped_column(ForeignKey("FunctionalRoles.id"))
+
+    FunctionalRoles: Mapped["FunctionalRoles"] = relationship(back_populates="Users")

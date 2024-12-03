@@ -19,3 +19,14 @@ class SchemaArchiveTask(BaseModel):
     id: uuid.UUID
     url: str
     cameraId: uuid.UUID
+
+class SchemaUsers(BaseModel):
+    id: uuid.UUID
+    login: str
+    fio: str
+    roleId: uuid.UUID
+
+class SchemaFunctionalRoles(BaseModel):
+    id: uuid.UUID
+    name: str
+    ServicePackets: str
