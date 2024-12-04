@@ -57,7 +57,6 @@ class FunctionalRoles(Base):
 
     id: Mapped[uuid_pk]
     name: Mapped[str]
-    ServicePackets: Mapped[str]
 
     usersRole: Mapped[list["Users"]] = relationship("Users", back_populates="FunctionalRoles")
 

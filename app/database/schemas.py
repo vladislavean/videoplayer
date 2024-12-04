@@ -29,4 +29,3 @@ class SchemaUsers(BaseModel):
 class SchemaFunctionalRoles(BaseModel):
     id: uuid.UUID
     name: str
-    ServicePackets: str
