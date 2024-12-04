@@ -25,6 +25,7 @@ class SchemaUsers(BaseModel):
     login: str
     fio: str
     roleId: uuid.UUID
+    password: str
 
 class SchemaFunctionalRoles(BaseModel):
     id: uuid.UUID

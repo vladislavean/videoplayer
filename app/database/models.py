@@ -67,5 +67,6 @@ class Users(Base):
     login: Mapped[str]
     fio: Mapped[str]
     roleId: Mapped[uuid.UUID] = mapped_column(ForeignKey("FunctionalRoles.id"))
+    password: Mapped[str]
 
     FunctionalRoles: Mapped["FunctionalRoles"] = relationship(back_populates="Users")
