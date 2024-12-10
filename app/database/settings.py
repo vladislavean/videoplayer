@@ -1,12 +1,15 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class PostgreSettings(BaseSettings):
+class APISettings(BaseSettings):
     DB_HOST: str
     DB_PORT: int
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
+
+    REDIS_HOST: str
+    REDIS_PORT: int
 
     @property
     def DATABASE_URL(self) -> str:
@@ -15,4 +18,4 @@ class PostgreSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
 
-postgre_settings = PostgreSettings()
+api_settings = APISettings()
