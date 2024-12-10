@@ -3,12 +3,12 @@ from fastapi import HTTPException
 
 from fastapi import APIRouter
 
-from app.database.db import select_all, find_all, find_one_or_none, insert_one
+from app.database.db import select_all, find_all, find_one_or_none, insert_one, get_async_session
 from app.database.models import Streets, Cameras, ArchivesTask
 from app.database.schemas import SchemaStreet, SchemaCamera, SchemaArchiveTask
 from app.utils import streaming_video, download_video
 
-router = APIRouter()
+router = APIRouter(tags=["Moscowvideos_API"])
 
 
 @router.get(
@@ -18,7 +18,8 @@ router = APIRouter()
     tags=['Street_API']
 )
 async def get_streets():
-    return await select_all(Streets)
+    async with get_async_session() as session:
+        return await select_all(session=session, model=Streets)
 
 
 @router.get(
@@ -28,7 +29,8 @@ async def get_streets():
     tags=['Cameras_API']
 )
 async def get_cameras():
-    return await select_all(Cameras)
+    async with get_async_session() as session:
+        return await select_all(session=session, model=Cameras)
 
 
 @router.get(
@@ -38,7 +40,8 @@ async def get_cameras():
     tags=['Archives_API']
 )
 async def get_archives():
-    return await select_all(ArchivesTask)
+    async with get_async_session() as session:
+        return await select_all(session=session, model=ArchivesTask)
 
 
 @router.get(
@@ -48,7 +51,8 @@ async def get_archives():
     tags=['Cameras_API']
 )
 async def get_cameras_by_street(street_id: uuid.UUID):
-    return await find_all(Cameras, streetId=street_id)
+    async with get_async_session() as session:
+        return await find_all(session=session, model=Cameras, streetId=street_id)
 
 
 @router.get(
@@ -58,7 +62,8 @@ async def get_cameras_by_street(street_id: uuid.UUID):
     tags=['Archives_API']
 )
 async def get_archives_by_camera(camera_id: uuid.UUID):
-    return await find_all(ArchivesTask, cameraId=camera_id)
+    async with get_async_session() as session:
+        return await find_all(session=session, model=ArchivesTask, cameraId=camera_id)
 
 
 @router.get(
@@ -67,7 +72,8 @@ async def get_archives_by_camera(camera_id: uuid.UUID):
     tags=['Archives_API']
 )
 async def get_archive_video(archive_id: uuid.UUID):
-    archive = await find_one_or_none(ArchivesTask, id=archive_id)
+    async with get_async_session() as session:
+        archive = await find_one_or_none(session=session, model=ArchivesTask, id=archive_id)
     if archive is None:
         raise HTTPException(status_code=404)
     return await streaming_video(archive.url)
@@ -79,7 +85,8 @@ async def get_archive_video(archive_id: uuid.UUID):
     tags=['Archives_API']
 )
 async def get_archive_video(archive_id: uuid.UUID):
-    archive = await find_one_or_none(ArchivesTask, id=archive_id)
+    async with get_async_session() as session:
+        archive = await find_one_or_none(session=session, model=ArchivesTask, id=archive_id)
     if archive is None:
         raise HTTPException(status_code=404)
     return await download_video(archive.url, archive_id)
@@ -89,7 +96,8 @@ async def get_archive_video(archive_id: uuid.UUID):
              summary="Создание новой улицы",
              tags=['Street_API'])
 async def add_street(street_name: str):
-    return await insert_one(Streets, name=street_name)
+    async with get_async_session() as session:
+        return await insert_one(session=session, model=Streets, name=street_name)
 
 
 @router.post(
@@ -97,7 +105,16 @@ async def add_street(street_name: str):
     summary="Добавление новой камеры на портал. Id улицы указывать самостоятельно пж",
     tags=['Cameras_API']
 )
-async def add_camera(camera_title: str,
-                     camera_streetid: uuid.UUID,
-                     camera_address: str):
-    return await insert_one(Cameras, title=camera_title, streetId=camera_streetid, address=camera_address)
+async def add_camera(
+    camera_title: str,
+    camera_streetid: uuid.UUID,
+    camera_address: str
+):
+    async with get_async_session() as session:
+        return await insert_one(
+            session=session,
+            model=Cameras,
+            title=camera_title,
+            streetId=camera_streetid,
+            address=camera_address
+        )
