@@ -52,6 +52,7 @@ class ArchivesTask(Base):
 
     street: Mapped["Cameras"] = relationship(back_populates="ArchivesTask")
 
+
 class FunctionalRoles(Base):
     __tablename__ = 'functionalroles'
 
@@ -59,6 +60,7 @@ class FunctionalRoles(Base):
     name: Mapped[str]
 
     usersRole: Mapped[list["Users"]] = relationship("Users", back_populates="FunctionalRoles")
+
 
 class Users(Base):
     __tablename__ = 'users'
