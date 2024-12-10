@@ -20,12 +20,14 @@ class SchemaArchiveTask(BaseModel):
     url: str
     cameraId: uuid.UUID
 
+
 class SchemaUsers(BaseModel):
     id: uuid.UUID
     login: str
     fio: str
     roleId: uuid.UUID
     password: str
+
 
 class SchemaFunctionalRoles(BaseModel):
     id: uuid.UUID
