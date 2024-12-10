@@ -11,7 +11,7 @@ from alembic import context
 from app.database.models import Base
 from app.database.models import ArchivesTask, Cameras, Streets
 
-from app.database.settings import postgre_settings
+from app.database.settings import api_settings
 
 
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
@@ -22,7 +22,7 @@ sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 config = context.config
 
 
-config.set_main_option("sqlalchemy.url", f"{postgre_settings.DATABASE_URL}?async_fallback=True")
+config.set_main_option("sqlalchemy.url", f"{api_settings.DATABASE_URL}?async_fallback=True")
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
