@@ -57,7 +57,7 @@ class FunctionalRoles(Base):
     __tablename__ = 'functionalroles'
 
     id: Mapped[uuid_pk]
-    name: Mapped[str]
+    name: Mapped[str]  # можно сделать Enum или Literal
 
     usersRole: Mapped[list["Users"]] = relationship("Users", back_populates="FunctionalRoles")
 
