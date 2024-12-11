@@ -29,5 +29,5 @@ async def authenticate_user(login: str = Form(), password: str = Form()):
     async with get_async_session() as session:
         user = await find_one_or_none(session=session, model=Users, login=login)
     if not (user and verify_password(password, user.password)):
-        return status.HTTP_401_UNAUTHORIZED(detail="Неправильное имя пользователя или пароль")
+        return None
     return user
