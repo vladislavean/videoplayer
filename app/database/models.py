@@ -54,21 +54,21 @@ class ArchivesTask(Base):
 
 
 class FunctionalRoles(Base):
-    __tablename__ = 'functionalroles'
+    __tablename__ = "functionalroles"
 
     id: Mapped[uuid_pk]
-    name: Mapped[str]  # можно сделать Enum или Literal
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
 
-    usersRole: Mapped[list["Users"]] = relationship("Users", back_populates="FunctionalRoles")
+    users_role: Mapped[list["Users"]] = relationship("Users", back_populates="functional_roles")
 
 
 class Users(Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id: Mapped[uuid_pk]
-    login: Mapped[str]
-    fio: Mapped[str]
-    roleId: Mapped[uuid.UUID] = mapped_column(ForeignKey("FunctionalRoles.id"))
-    password: Mapped[str]
+    login: Mapped[str] = mapped_column(unique=True, nullable=False)
+    fio: Mapped[str] = mapped_column(unique=True, nullable=False)
+    role_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("functionalroles.id"), name="roleid")
+    password: Mapped[str] = mapped_column(nullable=False)
 
-    FunctionalRoles: Mapped["FunctionalRoles"] = relationship(back_populates="Users")
+    functional_roles: Mapped["FunctionalRoles"] = relationship(back_populates="users_role")
