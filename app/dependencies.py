@@ -1,0 +1,33 @@
+from fastapi import Request, Depends, Response, status
+from app.database.db import get_async_session, find_one_or_none
+from app.database.models import Users, FunctionalRoles
+
+from app.database.redis_settings import redis
+
+
+async def get_current_user(request: Request):
+    session = request.cookies.get("session_id")
+    if not session:
+        return None
+    user_id = await redis.exists(session)
+    if not user_id:
+        return None
+    return user_id
+
+
+async def get_auth_admin(user_id = Depends(get_current_user)):
+    if not user_id:
+        return status.HTTP_401_UNAUTHORIZED(detail="Вы не авторизованы")
+    async with get_async_session() as session:
+        user = await find_one_or_none(session=session, model=Users, id=user_id)
+        if not user:
+            return status.HTTP_401_UNAUTHORIZED(detail="Вы не авторизованы")
+        role = await find_one_or_none(session=session, model=FunctionalRoles, id=user.roleId)
+        if not role:
+            return status.HTTP_401_UNAUTHORIZED(detail="Вы не авторизованы")
+        if role.name != "admin":
+            return status.HTTP_401_UNAUTHORIZED(detail="Вы не авторизованы")
+        return user
+
+
+
