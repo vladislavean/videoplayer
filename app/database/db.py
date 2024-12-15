@@ -1,5 +1,6 @@
+import uuid
 from contextlib import asynccontextmanager
-
+from fastapi import HTTPException
 from app.database.settings import api_settings
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from app.database.exceptions import catch_db_errors
@@ -47,7 +48,29 @@ async def find_all(session: AsyncSession, model, **filter_by):
 
 @catch_db_errors
 async def insert_one(session: AsyncSession, model, **data):
-    query = insert(model).values(**data).returning()
+    query = insert(model).values(**data).returning(model.id)
+    result = await session.execute(query)
+    await session.flush()
+    return result.mappings().first()
+
+
+@catch_db_errors
+async def update_one(session: AsyncSession, model, id: uuid.UUID, **data):
+    item = await find_one_or_none(session, model, id=id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Элемент для обновления не найден")
+    query = update(model).where(model.id == id).values(**data).returning(model.id)
+    result = await session.execute(query)
+    await session.flush()
+    return result.mappings().first()
+
+
+@catch_db_errors
+async def delete_one(session: AsyncSession, model, id: uuid.UUID):
+    item = await find_one_or_none(session, model, id=id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Элемент для удаления не найден")
+    query = delete(model).where(model.id == id).returning(model.__table__.columns)
     result = await session.execute(query)
     await session.flush()
     return result.mappings().first()
