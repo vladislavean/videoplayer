@@ -1,24 +1,36 @@
-from fastapi import APIRouter
-from app.database.db import select_all, insert_one, get_async_session
+import uuid
+
+from fastapi import APIRouter, Depends
+from app.dependencies import get_auth_user
+from app.database.db import select_all, get_async_session, find_one_or_none
 from app.database.models import Streets
 from app.database.schemas import SchemaStreet
 
 
-streets_router = APIRouter(prefix='/streets', tags=['Street_API'])
+streets_router = APIRouter(
+    prefix='/streets',
+    tags=['Street_API'],
+    dependencies=[Depends(get_auth_user)],
+)
 
 
 @streets_router.get(
     "/",
     response_model=list[SchemaStreet],
     summary="Все улицы",
-    tags=['Street_API']
 )
 async def get_streets():
     async with get_async_session() as session:
         return await select_all(session=session, model=Streets)
 
 
-@streets_router.post("/add", summary="Создание новой улицы")
-async def add_street(street_name: str):
+@streets_router.get(
+    "/{id}",
+    response_model=SchemaStreet,
+    summary="Найти улицу по id",
+)
+async def get_street_by_id(id: uuid.UUID):
     async with get_async_session() as session:
-        return await insert_one(session=session, model=Streets, name=street_name)
+        return await find_one_or_none(session=session, model=Streets, id=id)
+
+
