@@ -1,11 +1,15 @@
 import uuid
-from fastapi import APIRouter
-from app.database.db import select_all, find_all, insert_one, get_async_session
+from fastapi import APIRouter, Depends, Form
+from app.database.db import select_all, find_all, get_async_session, find_one_or_none
 from app.database.models import Cameras
 from app.database.schemas import SchemaCamera
+from app.dependencies import get_auth_user
 
-
-cameras_router = APIRouter(prefix='/cameras', tags=['Cameras_API'])
+cameras_router = APIRouter(
+    prefix='/cameras',
+    tags=['Cameras_API'],
+    dependencies=[Depends(get_auth_user)]
+)
 
 
 @cameras_router.get(
@@ -19,29 +23,19 @@ async def get_cameras():
 
 
 @cameras_router.get(
+    "/{id}",
+    response_model=SchemaCamera,
+    summary="Найти камеру по id",
+)
+async def get_camera_by_id(id: uuid.UUID):
+    async with get_async_session() as session:
+        return await find_one_or_none(session=session, model=Cameras, id=id)
+
+
+@cameras_router.get(
     "/{street_id}",
-    response_model=list[SchemaCamera],
     summary="Найти камеры по id улицы",
 )
 async def get_cameras_by_street(street_id: uuid.UUID):
     async with get_async_session() as session:
         return await find_all(session=session, model=Cameras, streetId=street_id)
-
-
-@cameras_router.post(
-    "/add",
-    summary="Добавление новой камеры на портал. Id улицы указывать самостоятельно пж",
-)
-async def add_camera(
-    camera_title: str,
-    camera_streetid: uuid.UUID,
-    camera_address: str
-):
-    async with get_async_session() as session:
-        return await insert_one(
-            session=session,
-            model=Cameras,
-            title=camera_title,
-            streetId=camera_streetid,
-            address=camera_address
-        )
