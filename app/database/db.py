@@ -70,7 +70,7 @@ async def delete_one(session: AsyncSession, model, id: uuid.UUID):
     item = await find_one_or_none(session, model, id=id)
     if not item:
         raise HTTPException(status_code=404, detail="Элемент для удаления не найден")
-    query = delete(model).where(model.id == id).returning(model.__table__.columns)
+    query = delete(model).where(model.id == id).returning(model.id)
     result = await session.execute(query)
     await session.flush()
     return result.mappings().first()
