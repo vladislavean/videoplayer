@@ -24,7 +24,17 @@ async def get_archives():
 
 
 @archives_router.get(
-    "/{camera_id}",
+    "/{archive_id}",
+    response_model=SchemaArchiveTask,
+    summary="Найти видос по id",
+)
+async def get_archive_by_id(archive_id: uuid.UUID):
+    async with get_async_session() as session:
+        return await find_one_or_none(session=session, model=ArchivesTask, id=archive_id)
+
+
+@archives_router.get(
+    "/by_camera/{camera_id}",
     response_model=list[SchemaArchiveTask],
     summary="Найти видосы по id камеры",
 )
@@ -34,7 +44,7 @@ async def get_archives_by_camera(camera_id: uuid.UUID):
 
 
 @archives_router.get(
-    "/{archive_id}",
+    "/watch/{archive_id}",
     summary="Стрим видоса по id (чистые байты)",
 )
 async def get_archive_video(archive_id: uuid.UUID):
