@@ -1,5 +1,3 @@
-import uuid
-
 from fastapi import APIRouter, Depends, Form, HTTPException
 from app.dependencies import get_auth_user
 from app.database.db import get_async_session, find_one_or_none, update_one
@@ -13,7 +11,7 @@ users_router = APIRouter(
 )
 
 
-@users_router.get("/me")
+@users_router.get("/me", summary="Мои данные")
 async def get_me(user: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         role = await find_one_or_none(session=session, model=FunctionalRoles, id=user.roleId)
@@ -34,6 +32,9 @@ async def update_login(
             raise HTTPException(status_code=401, detail="Неправильный логин")
         if new_login == old_login:
             raise HTTPException(status_code=400, detail="Новый логин должен отличаться от старого")
+        user_exist = await find_one_or_none(session=session, model=Users, login=new_login)
+        if user_exist.id != user.id:
+            raise HTTPException(status_code=400, detail="Пользователь с таким логином уже существует")
         return await update_one(session=session, model=Users, id=user.id, login=new_login)
 
 
