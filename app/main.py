@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.database.redis_settings import redis
+from app.routers.admin.roles import admin_roles_router
 from app.routers.archives import archives_router
 from app.routers.cameras import cameras_router
 from app.routers.streets import streets_router
@@ -38,6 +39,7 @@ app.include_router(admin_archives_router)
 app.include_router(admin_cameras_router)
 app.include_router(admin_streets_router)
 app.include_router(admin_users_router)
+app.include_router(admin_roles_router)
 
 
 app.add_middleware(
