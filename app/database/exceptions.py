@@ -10,6 +10,9 @@ def catch_db_errors(func):
         try:
             return await func(*args, **kwargs)
 
+        except HTTPException:
+            raise
+
         except SQLAlchemyError as e:
             raise HTTPException(status_code=500, detail="SQLAlchemy error occurred: " + str(e))
 
