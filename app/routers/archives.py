@@ -1,11 +1,16 @@
 import uuid
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from app.database.db import select_all, find_all, find_one_or_none, get_async_session
 from app.database.models import ArchivesTask
 from app.database.schemas import SchemaArchiveTask
+from app.dependencies import get_auth_user
 from app.utils import streaming_video, download_video
 
-archives_router = APIRouter(prefix='/archives', tags=['Archives_API'])
+archives_router = APIRouter(
+    prefix='/archives',
+    tags=['Archives_API'],
+    dependencies=[Depends(get_auth_user)]
+)
 
 
 @archives_router.get(
