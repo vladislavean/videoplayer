@@ -5,7 +5,11 @@ from app.routers.archives import archives_router
 from app.routers.cameras import cameras_router
 from app.routers.streets import streets_router
 from app.routers.users import users_router
-from app.auth.router import router as auth_router
+from app.auth.router import auth_router
+from app.routers.admin.archives import admin_archives_router
+from app.routers.admin.cameras import admin_cameras_router
+from app.routers.admin.streets import admin_streets_router
+from app.routers.admin.users import admin_users_router
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -22,18 +26,25 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+
 app.include_router(auth_router)
+
 app.include_router(archives_router)
 app.include_router(cameras_router)
 app.include_router(streets_router)
 app.include_router(users_router)
+
+app.include_router(admin_archives_router)
+app.include_router(admin_cameras_router)
+app.include_router(admin_streets_router)
+app.include_router(admin_users_router)
 
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
