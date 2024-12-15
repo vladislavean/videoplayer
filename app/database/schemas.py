@@ -22,11 +22,9 @@ class SchemaArchiveTask(BaseModel):
 
 
 class SchemaUsers(BaseModel):
-    id: uuid.UUID
     login: str
     fio: str
     roleId: uuid.UUID
-    password: str
 
 
 class SchemaFunctionalRoles(BaseModel):
