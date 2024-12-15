@@ -9,4 +9,4 @@ redis = aioredis.StrictRedis(
     decode_responses=True
 )
 
-SESSION_EXPIRE_TIME = 3600 * 24 * 7
+SESSION_EXPIRE_TIME = 3600 * 12
