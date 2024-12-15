@@ -33,7 +33,8 @@ async def get_camera_by_id(id: uuid.UUID):
 
 
 @cameras_router.get(
-    "/{street_id}",
+    "/by_street/{street_id}",
+    response_model=list[SchemaCamera],
     summary="Найти камеры по id улицы",
 )
 async def get_cameras_by_street(street_id: uuid.UUID):
