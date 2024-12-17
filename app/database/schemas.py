@@ -17,6 +17,7 @@ class SchemaCamera(BaseModel):
 
 class SchemaArchiveTask(BaseModel):
     id: uuid.UUID
+    name: str
     url: str
     cameraId: uuid.UUID
 

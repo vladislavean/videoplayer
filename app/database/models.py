@@ -48,6 +48,7 @@ class ArchivesTask(Base):
     __tablename__ = "archivestask"
 
     id: Mapped[uuid_pk]
+    name: Mapped[str]
     cameraId: Mapped[uuid.UUID] = mapped_column(ForeignKey("cameras.id"))
     url: Mapped[str]
 
