@@ -23,6 +23,8 @@ async def get_archives(request: Request):
     print(f"URL: {request.url}")
     print(f"Headers: {request.headers}")
     print(f"Query params: {request.query_params}")
+    print(f"Body: {request.body}")
+    print(f"Cookies: {request.cookies}")
     async with get_async_session() as session:
         return await select_all(session=session, model=ArchivesTask)
 
