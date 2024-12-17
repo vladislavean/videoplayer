@@ -17,7 +17,7 @@ async def login(response: Response, user: Users = Depends(authenticate_user)):
     response.set_cookie(
         key="session_id",
         value=session_id,
-        httponly=True,
+        httponly=False,
         expires=datetime.now(timezone.utc) + timedelta(seconds=SESSION_EXPIRE_TIME),
         samesite=None,
         secure=False,
