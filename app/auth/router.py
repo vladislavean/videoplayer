@@ -15,7 +15,7 @@ async def login(user: Users = Depends(authenticate_user)):
         raise HTTPException(status_code=401, detail="Неправильный логин или пароль")
     session_id = str(uuid.uuid4())
     await redis.setex(session_id, SESSION_EXPIRE_TIME, str(user.id))
-    response = JSONResponse(content={"message": "Успешный вход в систему"})
+    response = JSONResponse(content={"message": "Успешный вход в систему", "session_id": session_id})
     response.set_cookie(
         key="session_id",
         value=session_id,
