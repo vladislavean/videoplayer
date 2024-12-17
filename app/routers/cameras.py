@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, Depends, Form
+from fastapi import APIRouter, Depends, Form, Request
 from app.database.db import select_all, find_all, get_async_session, find_one_or_none
 from app.database.models import Cameras
 from app.database.schemas import SchemaCamera
@@ -17,7 +17,11 @@ cameras_router = APIRouter(
     response_model=list[SchemaCamera],
     summary="Все камеры",
 )
-async def get_cameras():
+async def get_cameras(request: Request):
+    print(f"Method: {request.method}")
+    print(f"URL: {request.url}")
+    print(f"Headers: {request.headers}")
+    print(f"Query params: {request.query_params}")
     async with get_async_session() as session:
         return await select_all(session=session, model=Cameras)
 

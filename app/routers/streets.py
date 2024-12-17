@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from app.dependencies import get_auth_user
 from app.database.db import select_all, get_async_session, find_one_or_none
 from app.database.models import Streets
@@ -19,7 +19,12 @@ streets_router = APIRouter(
     response_model=list[SchemaStreet],
     summary="Все улицы",
 )
-async def get_streets():
+async def get_streets(request: Request):
+    print(f"Method: {request.method}")
+    print(f"URL: {request.url}")
+    print(f"Headers: {request.headers}")
+    print(f"Query params: {request.query_params}")
+
     async with get_async_session() as session:
         return await select_all(session=session, model=Streets)
 

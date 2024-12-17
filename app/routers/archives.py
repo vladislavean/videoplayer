@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from app.database.db import select_all, find_all, find_one_or_none, get_async_session
 from app.database.models import ArchivesTask
 from app.database.schemas import SchemaArchiveTask
@@ -18,7 +18,11 @@ archives_router = APIRouter(
     response_model=list[SchemaArchiveTask],
     summary="Все видосы",
 )
-async def get_archives():
+async def get_archives(request: Request):
+    print(f"Method: {request.method}")
+    print(f"URL: {request.url}")
+    print(f"Headers: {request.headers}")
+    print(f"Query params: {request.query_params}")
     async with get_async_session() as session:
         return await select_all(session=session, model=ArchivesTask)
 
