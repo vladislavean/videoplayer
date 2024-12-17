@@ -8,7 +8,7 @@ from app.dependencies import get_auth_user
 cameras_router = APIRouter(
     prefix='/cameras',
     tags=['Cameras_API'],
-    dependencies=[Depends(get_auth_user)]
+    # dependencies=[Depends(get_auth_user)]
 )
 
 

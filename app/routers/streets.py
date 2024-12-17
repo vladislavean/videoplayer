@@ -10,7 +10,7 @@ from app.database.schemas import SchemaStreet
 streets_router = APIRouter(
     prefix='/streets',
     tags=['Street_API'],
-    dependencies=[Depends(get_auth_user)],
+    # dependencies=[Depends(get_auth_user)],
 )
 
 
