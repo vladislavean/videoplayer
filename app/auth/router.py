@@ -4,25 +4,27 @@ from app.auth.utils import authenticate_user
 from app.database.models import Users
 from app.database.redis_settings import redis, SESSION_EXPIRE_TIME
 from fastapi import APIRouter, Depends, Response, Request, HTTPException
+from fastapi.responses import JSONResponse
 
 auth_router = APIRouter(tags=["Auth"])
 
 
 @auth_router.post("/login")
-async def login(response: Response, user: Users = Depends(authenticate_user)):
+async def login(user: Users = Depends(authenticate_user)):
     if not user:
         raise HTTPException(status_code=401, detail="Неправильный логин или пароль")
     session_id = str(uuid.uuid4())
     await redis.setex(session_id, SESSION_EXPIRE_TIME, str(user.id))
+    response = JSONResponse(content={"message": "Успешный вход в систему"})
     response.set_cookie(
         key="session_id",
         value=session_id,
-        httponly=False,
+        httponly=True,
         expires=datetime.now(timezone.utc) + timedelta(seconds=SESSION_EXPIRE_TIME),
         samesite="lax",
         secure=False,
     )
-    return {"message": "Успешный вход в систему"}
+    return response
 
 
 @auth_router.post("/logout")
