@@ -20,6 +20,7 @@ async def login(user: Users = Depends(authenticate_user)):
         key="session_id",
         value=session_id,
         httponly=False,
+        max_age=SESSION_EXPIRE_TIME,
         expires=datetime.now(timezone.utc) + timedelta(seconds=SESSION_EXPIRE_TIME),
         samesite="lax",
         secure=False,
