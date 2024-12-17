@@ -19,7 +19,7 @@ async def login(response: Response, user: Users = Depends(authenticate_user)):
         value=session_id,
         httponly=False,
         expires=datetime.now(timezone.utc) + timedelta(seconds=SESSION_EXPIRE_TIME),
-        samesite=None,
+        samesite="lax",
         secure=False,
     )
     return {"message": "Успешный вход в систему"}
