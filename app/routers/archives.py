@@ -9,7 +9,7 @@ from app.utils import streaming_video, download_video
 archives_router = APIRouter(
     prefix='/archives',
     tags=['Archives_API'],
-    # dependencies=[Depends(get_auth_user)]
+    dependencies=[Depends(get_auth_user)]
 )
 
 
