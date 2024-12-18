@@ -4,7 +4,7 @@ from app.auth.utils import authenticate_user
 from app.database.models import Users
 from app.database.redis_settings import redis, SESSION_EXPIRE_TIME
 from fastapi import APIRouter, Depends, Response, Request, HTTPException
-from fastapi.responses import JSONResponse
+
 
 auth_router = APIRouter(tags=["Auth"])
 
@@ -18,11 +18,11 @@ async def login(response: Response, user: Users = Depends(authenticate_user)):
     response.set_cookie(
         key="session_id",
         value=session_id,
-        httponly=True,  # Используйте httponly=True для безопасности
+        httponly=True,
         max_age=SESSION_EXPIRE_TIME,
         expires=datetime.now(timezone.utc) + timedelta(seconds=SESSION_EXPIRE_TIME),
-        samesite=None,  # Обязательно "None", если клиент и сервер на разных доменах
-        secure=True,  # Если используете HTTP (в продакшене: True с HTTPS)
+        samesite=None,
+        secure=True,
     )
     return {"message": "Успешный вход в систему", "session_id": session_id}
 

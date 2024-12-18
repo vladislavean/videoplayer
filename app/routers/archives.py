@@ -17,14 +17,7 @@ archives_router = APIRouter(
     response_model=list[SchemaArchiveTask],
     summary="Все видосы",
 )
-async def get_archives(request: Request, user: Users = Depends(get_auth_user)):
-    print(f"User: {user}")
-    print(f"Method: {request.method}")
-    print(f"URL: {request.url}")
-    print(f"Headers: {request.headers}")
-    print(f"Query params: {request.query_params}")
-    print(f"Body: {request.body}")
-    print(f"Cookies: {request.cookies}")
+async def get_archives(_: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await select_all(session=session, model=ArchivesTask)
 

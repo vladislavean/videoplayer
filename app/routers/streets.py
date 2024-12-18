@@ -10,7 +10,6 @@ from app.database.schemas import SchemaStreet
 streets_router = APIRouter(
     prefix='/streets',
     tags=['Street_API'],
-    dependencies=[Depends(get_auth_user)],
 )
 
 
@@ -19,8 +18,7 @@ streets_router = APIRouter(
     response_model=list[SchemaStreet],
     summary="Все улицы",
 )
-async def get_streets(user_id: str = Depends(get_current_user)):
-    print(f"User: {user_id}")
+async def get_streets(_: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await select_all(session=session, model=Streets)
 
