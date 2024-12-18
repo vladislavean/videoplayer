@@ -19,11 +19,11 @@ async def login(user: Users = Depends(authenticate_user)):
     response.set_cookie(
         key="session_id",
         value=session_id,
-        httponly=False,
+        httponly=True,  # Используйте httponly=True для безопасности
         max_age=SESSION_EXPIRE_TIME,
         expires=datetime.now(timezone.utc) + timedelta(seconds=SESSION_EXPIRE_TIME),
-        samesite="lax",
-        secure=False,
+        samesite="None",  # Обязательно "None", если клиент и сервер на разных доменах
+        secure=False,  # Если используете HTTP (в продакшене: True с HTTPS)
     )
     return response
 

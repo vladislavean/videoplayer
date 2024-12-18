@@ -41,10 +41,9 @@ app.include_router(admin_streets_router)
 app.include_router(admin_users_router)
 app.include_router(admin_roles_router)
 
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins="http://localhost:3000",
+    allow_origins=["http://localhost:3000"],  # Указываем массив
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
