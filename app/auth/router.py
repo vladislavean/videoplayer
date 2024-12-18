@@ -21,8 +21,8 @@ async def login(response: Response, user: Users = Depends(authenticate_user)):
         httponly=True,  # Используйте httponly=True для безопасности
         max_age=SESSION_EXPIRE_TIME,
         expires=datetime.now(timezone.utc) + timedelta(seconds=SESSION_EXPIRE_TIME),
-        samesite="lax",  # Обязательно "None", если клиент и сервер на разных доменах
-        secure=False,  # Если используете HTTP (в продакшене: True с HTTPS)
+        samesite=None,  # Обязательно "None", если клиент и сервер на разных доменах
+        secure=True,  # Если используете HTTP (в продакшене: True с HTTPS)
     )
     return {"message": "Успешный вход в систему", "session_id": session_id}
 
