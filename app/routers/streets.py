@@ -19,13 +19,7 @@ streets_router = APIRouter(
     response_model=list[SchemaStreet],
     summary="Все улицы",
 )
-async def get_streets(request: Request, _: Users = Depends(get_auth_user)):
-    print(f"Method: {request.method}")
-    print(f"URL: {request.url}")
-    print(f"Headers: {request.headers}")
-    print(f"Query params: {request.query_params}")
-    print(f"Body: {request.body}")
-    print(f"Cookies: {request.cookies}")
+async def get_streets(_: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await select_all(session=session, model=Streets)
 
