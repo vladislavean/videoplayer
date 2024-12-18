@@ -3,7 +3,7 @@ import uuid
 from fastapi import APIRouter, Depends, Request
 from app.dependencies import get_auth_user
 from app.database.db import select_all, get_async_session, find_one_or_none
-from app.database.models import Streets
+from app.database.models import Streets, Users
 from app.database.schemas import SchemaStreet
 
 
@@ -19,7 +19,7 @@ streets_router = APIRouter(
     response_model=list[SchemaStreet],
     summary="Все улицы",
 )
-async def get_streets(request: Request):
+async def get_streets(request: Request, user: Users = Depends(get_auth_user)):
     print(f"Method: {request.method}")
     print(f"URL: {request.url}")
     print(f"Headers: {request.headers}")
@@ -35,7 +35,7 @@ async def get_streets(request: Request):
     response_model=SchemaStreet,
     summary="Найти улицу по id",
 )
-async def get_street_by_id(id: uuid.UUID):
+async def get_street_by_id(id: uuid.UUID, user: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await find_one_or_none(session=session, model=Streets, id=id)
 

@@ -1,14 +1,13 @@
 import uuid
 from fastapi import APIRouter, Depends, Form, Request
 from app.database.db import select_all, find_all, get_async_session, find_one_or_none
-from app.database.models import Cameras
+from app.database.models import Cameras, Users
 from app.database.schemas import SchemaCamera
 from app.dependencies import get_auth_user
 
 cameras_router = APIRouter(
     prefix='/cameras',
     tags=['Cameras_API'],
-    dependencies=[Depends(get_auth_user)]
 )
 
 
@@ -17,7 +16,7 @@ cameras_router = APIRouter(
     response_model=list[SchemaCamera],
     summary="Все камеры",
 )
-async def get_cameras(request: Request):
+async def get_cameras(request: Request, user: Users = Depends(get_auth_user)):
     print(f"Method: {request.method}")
     print(f"URL: {request.url}")
     print(f"Headers: {request.headers}")
@@ -33,7 +32,7 @@ async def get_cameras(request: Request):
     response_model=SchemaCamera,
     summary="Найти камеру по id",
 )
-async def get_camera_by_id(id: uuid.UUID):
+async def get_camera_by_id(id: uuid.UUID, user: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await find_one_or_none(session=session, model=Cameras, id=id)
 
@@ -43,6 +42,6 @@ async def get_camera_by_id(id: uuid.UUID):
     response_model=list[SchemaCamera],
     summary="Найти камеры по id улицы",
 )
-async def get_cameras_by_street(street_id: uuid.UUID):
+async def get_cameras_by_street(street_id: uuid.UUID, user: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await find_all(session=session, model=Cameras, streetId=street_id)
