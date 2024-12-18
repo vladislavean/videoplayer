@@ -14,7 +14,7 @@ async def login(response: Response, user: Users = Depends(authenticate_user)):
     if not user:
         raise HTTPException(status_code=401, detail="Неправильный логин или пароль")
     session_id = str(uuid.uuid4())
-    redis.setex(session_id, SESSION_EXPIRE_TIME, str(user.id))
+    await redis.setex(session_id, SESSION_EXPIRE_TIME, str(user.id))
     response.set_cookie(
         key="session_id",
         value=session_id,
@@ -31,7 +31,7 @@ async def login(response: Response, user: Users = Depends(authenticate_user)):
 async def logout(request: Request, response: Response):
     session_id = request.cookies.get("session_id")
     if session_id:
-        redis.delete(session_id)
+        await redis.delete(session_id)
         response.delete_cookie(key="session_id")
     return {"message": "Успешный выход из системы"}
 
