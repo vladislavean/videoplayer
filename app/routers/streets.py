@@ -19,7 +19,7 @@ streets_router = APIRouter(
     response_model=list[SchemaStreet],
     summary="Все улицы",
 )
-async def get_streets(request: Request, user: Users = Depends(get_auth_user)):
+async def get_streets(request: Request, _: Users = Depends(get_auth_user)):
     print(f"Method: {request.method}")
     print(f"URL: {request.url}")
     print(f"Headers: {request.headers}")
@@ -35,7 +35,7 @@ async def get_streets(request: Request, user: Users = Depends(get_auth_user)):
     response_model=SchemaStreet,
     summary="Найти улицу по id",
 )
-async def get_street_by_id(id: uuid.UUID, user: Users = Depends(get_auth_user)):
+async def get_street_by_id(id: uuid.UUID, _: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await find_one_or_none(session=session, model=Streets, id=id)
 

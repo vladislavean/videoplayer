@@ -16,7 +16,7 @@ cameras_router = APIRouter(
     response_model=list[SchemaCamera],
     summary="Все камеры",
 )
-async def get_cameras(request: Request, user: Users = Depends(get_auth_user)):
+async def get_cameras(request: Request, _: Users = Depends(get_auth_user)):
     print(f"Method: {request.method}")
     print(f"URL: {request.url}")
     print(f"Headers: {request.headers}")
@@ -32,7 +32,7 @@ async def get_cameras(request: Request, user: Users = Depends(get_auth_user)):
     response_model=SchemaCamera,
     summary="Найти камеру по id",
 )
-async def get_camera_by_id(id: uuid.UUID, user: Users = Depends(get_auth_user)):
+async def get_camera_by_id(id: uuid.UUID, _: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await find_one_or_none(session=session, model=Cameras, id=id)
 
@@ -42,6 +42,6 @@ async def get_camera_by_id(id: uuid.UUID, user: Users = Depends(get_auth_user)):
     response_model=list[SchemaCamera],
     summary="Найти камеры по id улицы",
 )
-async def get_cameras_by_street(street_id: uuid.UUID, user: Users = Depends(get_auth_user)):
+async def get_cameras_by_street(street_id: uuid.UUID, _: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await find_all(session=session, model=Cameras, streetId=street_id)

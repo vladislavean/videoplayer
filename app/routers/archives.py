@@ -18,6 +18,7 @@ archives_router = APIRouter(
     summary="Все видосы",
 )
 async def get_archives(request: Request, user: Users = Depends(get_auth_user)):
+    print(f"User: {user}")
     print(f"Method: {request.method}")
     print(f"URL: {request.url}")
     print(f"Headers: {request.headers}")
@@ -33,7 +34,7 @@ async def get_archives(request: Request, user: Users = Depends(get_auth_user)):
     response_model=SchemaArchiveTask,
     summary="Найти видос по id",
 )
-async def get_archive_by_id(archive_id: uuid.UUID, user: Users = Depends(get_auth_user)):
+async def get_archive_by_id(archive_id: uuid.UUID, _: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await find_one_or_none(session=session, model=ArchivesTask, id=archive_id)
 
@@ -43,7 +44,7 @@ async def get_archive_by_id(archive_id: uuid.UUID, user: Users = Depends(get_aut
     response_model=list[SchemaArchiveTask],
     summary="Найти видосы по id камеры",
 )
-async def get_archives_by_camera(camera_id: uuid.UUID, user: Users = Depends(get_auth_user)):
+async def get_archives_by_camera(camera_id: uuid.UUID, _: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         return await find_all(session=session, model=ArchivesTask, cameraId=camera_id)
 
@@ -52,7 +53,7 @@ async def get_archives_by_camera(camera_id: uuid.UUID, user: Users = Depends(get
     "/watch/{archive_id}",
     summary="Стрим видоса по id (чистые байты)",
 )
-async def get_archive_video(archive_id: uuid.UUID, user: Users = Depends(get_auth_user)):
+async def get_archive_video(archive_id: uuid.UUID, _: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         archive = await find_one_or_none(session=session, model=ArchivesTask, id=archive_id)
     if archive is None:
@@ -64,7 +65,7 @@ async def get_archive_video(archive_id: uuid.UUID, user: Users = Depends(get_aut
     "/download/{archive_id}",
     summary="Скачивание видео",
 )
-async def get_archive_video(archive_id: uuid.UUID, user: Users = Depends(get_auth_user)):
+async def get_archive_video(archive_id: uuid.UUID, _: Users = Depends(get_auth_user)):
     async with get_async_session() as session:
         archive = await find_one_or_none(session=session, model=ArchivesTask, id=archive_id)
     if archive is None:
