@@ -8,7 +8,7 @@ from app.database.redis_settings import redis
 async def get_current_user(request: Request) -> str:
     session = str(request.cookies.get("session_id"))
     if not session:
-        raise HTTPException(status_code=401, detail="Вы не авторизованы")
+        raise HTTPException(status_code=401, detail="Нет сессии ДЫВЛАЖДЫВФАРЖЫВ")
     user_id = await redis.get(session)
     if not user_id:
         raise HTTPException(status_code=401, detail="Вы не авторизованы")
