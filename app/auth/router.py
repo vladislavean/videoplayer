@@ -10,12 +10,11 @@ auth_router = APIRouter(tags=["Auth"])
 
 
 @auth_router.post("/login")
-async def login(user: Users = Depends(authenticate_user)):
+async def login(response: Response, user: Users = Depends(authenticate_user)):
     if not user:
         raise HTTPException(status_code=401, detail="Неправильный логин или пароль")
     session_id = str(uuid.uuid4())
     await redis.setex(session_id, SESSION_EXPIRE_TIME, str(user.id))
-    response = JSONResponse(content={"message": "Успешный вход в систему", "session_id": session_id})
     response.set_cookie(
         key="session_id",
         value=session_id,
@@ -25,7 +24,7 @@ async def login(user: Users = Depends(authenticate_user)):
         samesite="None",  # Обязательно "None", если клиент и сервер на разных доменах
         secure=False,  # Если используете HTTP (в продакшене: True с HTTPS)
     )
-    return response
+    return {"message": "Успешный вход в систему", "session_id": session_id}
 
 
 @auth_router.post("/logout")
