@@ -22,7 +22,7 @@ async def login(response: Response, user: Users = Depends(authenticate_user)):
         max_age=SESSION_EXPIRE_TIME,
         expires=datetime.now(timezone.utc) + timedelta(seconds=SESSION_EXPIRE_TIME),
         samesite=None,
-        secure=True,
+        secure=False,
     )
     return {"message": "Успешный вход в систему", "session_id": session_id}
 

@@ -1,0 +1,13 @@
+services:  
+  app:
+    container_name: app
+    restart: unless-stopped
+    command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 10.8.0.1:8000
+    env_file: .env
+    build:
+      context: ./app
+      dockerfile: .dockerfile
+    expose:
+      - 8000
+
+
